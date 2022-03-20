@@ -10,18 +10,28 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <header>
-    <h1>THIS IS WAR</h1>
+    <h1>THIS IS WAR!</h1>
 </header>
 
 <body>
-    <Button onclick="startGame()">Start</Button>
-    <button onclick="nextRound()">Next round</button>
-    <h2>Computer</h2>
-    <div id="computer"></div>
+    <button onclick="startGame()" class="btn">Start</button>
+    <button onclick="nextRound()" class="btn">Next round</button>
+    <br>
+    <div class="player-container">
+        <h2>Computer</h2>
+        <div id="computer"></div>
+    </div>
 
-    <h2>You</h2>
-    <div id="player"></div>
+    <div class="player-container">
+        <h2>You</h2>
+        <div id="player"></div>
+    </div>
 
 </body>
+<br>
+<br>
+<footer>
+    App by Noy &copy; 2022
+</footer>
 
 </html>

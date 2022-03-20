@@ -57,7 +57,6 @@ function getObjDeck() {
         deck,
         shuffle(shuffleRate) {
             this.deck = shuffleDeck(this.deck, shuffleRate)
-            alert('successfuly shuffled')
             return this.deck
         },
         // the next function divides the cards equaly between the computer and the player
@@ -105,6 +104,10 @@ function startGame() {
 }
 
 function nextRound() {
+    if (computer === undefined) {
+        alert('click START to begin playing!')
+        return
+    }
     if (!gameOver()) {
         compareCards(
             openCards.call(computer, computer, 'computer'),
@@ -146,27 +149,19 @@ function compareCards(compCard, playerCard) {
             document.getElementById('player').classList.add('winner')
         } else {
             gameOver() //check if one of the players had lost
-            alert('TIE - open another card!')
+            setTimeout(function () { alert('TIE - open another card!') }, 300)
         }
     }
 }
 
 // this function is called when the player finished his cards "on-hand" and wants to continue
 function getStack() {
-    console.log(this)
     if (this.deck.length === 0 && this.stack.length !== 0) {
         // take the stack to your hand
         this.deck = [...this.stack]
         deckObj.shuffle.call(this, 20000)
         // empty stack array
         this.stack = []
-        console.log('continue to play')
-    } else {
-        if (this.stack.length === 0) {
-            gameOver()
-        } else {
-            return 'you must finish your cards first!'
-        }
     }
 }
 
