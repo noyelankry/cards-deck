@@ -101,7 +101,13 @@ function startGame() {
         openCards.call(computer, computer, 'computer'),
         openCards.call(player, player, 'player')
     )
+    compCounter = computer.deck.length + computer.stack.length
+    playerCounter = player.deck.length + player.stack.length
+    document.getElementById('computer-counter').innerText = `Total Cards Counter: ${compCounter}`
+    document.getElementById('player-counter').innerText = `Total Cards Counter: ${playerCounter}`
 }
+
+let playerCounter, compCounter
 
 function nextRound() {
     if (computer === undefined) {
@@ -114,6 +120,10 @@ function nextRound() {
             openCards.call(player, player, 'player')
         )
     }
+    compCounter = computer.deck.length + computer.stack.length
+    playerCounter = player.deck.length + player.stack.length
+    document.getElementById('computer-counter').innerText = `Total Cards Counter: ${compCounter}`
+    document.getElementById('player-counter').innerText = `Total Cards Counter: ${playerCounter}`
 }
 
 // this function is called at the beggining of every turn - when open cards button is clicked.
@@ -186,3 +196,4 @@ function gameOver() {
     }
     return false
 }
+
