@@ -7,26 +7,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THIS IS WAR!</title>
     <script src="cardsDeck.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <header>
     <h1>THIS IS WAR</h1>
-    <h2>Play Now!</h2>
 </header>
 
 <body>
-    <Button onclick="getObjDeck()">Start</Button>
-    <Button onclick="dealCards()">Deal Cards</Button>
+    <Button onclick="startGame()">Start</Button>
+    <button onclick="nextRound()">Next round</button>
+    <h2>Computer</h2>
+    <div id="computer"></div>
 
-    <div>
-        <h2>computer</h2>
-        <div class="card">
-            <img src="" alt="">
-        </div>
-    </div>
+    <h2>You</h2>
+    <div id="player"></div>
 
-    <div>
-        <h2>player</h2>
-    </div>
 </body>
 
 </html>

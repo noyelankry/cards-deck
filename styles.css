@@ -1,0 +1,44 @@
+* {
+    font-family: verdana;
+}
+
+body {
+    background-color: firebrick;
+}
+
+div{
+    margin: 5px;
+}
+
+.card {
+    display: inline-block;
+    width: 120px;
+    height: 180px; 
+    background-color: white;
+    border-radius: 5%;
+    font-size: 3rem;
+    font-family: Verdana;
+    text-align: center;
+    align-content: center;
+}
+
+.centered {
+    display: inline-block;
+    margin-top: 50%;
+}
+.values {
+    font-family: Tahoma;
+    margin: 5px;
+}
+
+.hearts , .diams{
+    color: red;
+}
+
+.spades , .clubs {
+    color: black;
+}
+
+.winner {
+    border: 5px black solid;
+}

@@ -21,7 +21,7 @@ const realValues = {
 
 // this function is called when the game starts!
 function getObjDeck() {
-    const suits = ["spades", "diamonds", "clubs", "hearts"]
+    const suits = ["spades", "diams", "clubs", "hearts"]
     const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
 
     const createCards = () => {
@@ -64,20 +64,21 @@ function getObjDeck() {
         // it should be used after the deck has been created and shuffled.
         dealCards() {
             const player = {}
-            player.hand = []
+            player.deck = []
             player.stack = [] //contains the cards that "player" won
-            player.getStack = getStack() //this method will be used when the cards in hand ran out
+            player.getStack = getStack.bind(player)
 
             const computer = {}
-            computer.hand = []
+            computer.deck = []
             computer.stack = [] //contains the cards that "computer" won
-            computer.getStack = getStack() //this method will be used when the cards in hand ran out
+            computer.getStack = getStack.bind(computer)
 
-            // start from the top down, because the deck length will be reduced...
+            // start from the top down, because the deck length will be reduced..
             for (let i = this.deck.length - 1; i >= 0; i--) {
                 let card = this.deck.pop()
-                i % 2 === 0 ? player.hand.push(card) : computer.hand.push(card)
+                i % 2 === 0 ? player.deck.push(card) : computer.deck.push(card)
             }
+
             return {
                 player,
                 computer
@@ -86,42 +87,80 @@ function getObjDeck() {
     }
 }
 
+//global variables:
+let computer, player
+let deckObj = {}
+
+//at the start of every game we need to create the deck, shuffle it, and deal cards.
+function startGame() {
+    deckObj = getObjDeck()
+    deckObj.shuffle(20000);
+
+    ({ computer, player } = deckObj.dealCards())
+
+    compareCards(
+        openCards.call(computer, computer, 'computer'),
+        openCards.call(player, player, 'player')
+    )
+}
+
+function nextRound() {
+    if (!gameOver()) {
+        compareCards(
+            openCards.call(computer, computer, 'computer'),
+            openCards.call(player, player, 'player')
+        )
+    }
+}
+
 // this function is called at the beggining of every turn - when open cards button is clicked.
-function openCards(hand) {
-    if (hand.length !== 0) {
-        let card = hand.pop()
+function openCards(obj, name) {
+    if (obj.deck.length !== 0) {
+        let card = obj.deck.pop()
+
+        let newLine = `
+            <div class='card'>
+                <span class='centered ${card.suit}'>
+                    ${card.value} &${card.suit};
+                </span>
+            </div>
+            `
+        document.getElementById(name).innerHTML = newLine
+
         return card
-    } else {
-        console.log(`Error: ${hand} ran out of cards.
-        pick up your stack and suffle!`)
     }
 }
 
 function compareCards(compCard, playerCard) {
+    document.getElementById('player').classList.remove('winner')
+    document.getElementById('computer').classList.remove('winner')
+
     if (realValues[`${compCard.value}`] > realValues[`${playerCard.value}`]) {
-        computerStack.push(compCard, playerCard)
+        computer.stack.push(compCard, playerCard)
         gameOver() //check if one of the players had lost
-        return 'computer won this round'
+        document.getElementById('computer').classList.add('winner')
     } else {
         if (realValues[`${compCard.value}`] < realValues[`${playerCard.value}`]) {
-            playerStack.push(compCard, playerCard)
+            player.stack.push(compCard, playerCard)
             gameOver() //check if one of the players had lost
-            return 'player won this round'
+            document.getElementById('player').classList.add('winner')
         } else {
             gameOver() //check if one of the players had lost
-            return 'TIE - open another card!'
+            alert('TIE - open another card!')
         }
     }
 }
 
 // this function is called when the player finished his cards "on-hand" and wants to continue
 function getStack() {
-    if (this.hand.length === 0 && this.stack.length !== 0) {
+    console.log(this)
+    if (this.deck.length === 0 && this.stack.length !== 0) {
         // take the stack to your hand
-        this.hand = [...this.stack]
+        this.deck = [...this.stack]
+        deckObj.shuffle.call(this, 20000)
         // empty stack array
         this.stack = []
-        return 'continue to play'
+        console.log('continue to play')
     } else {
         if (this.stack.length === 0) {
             gameOver()
@@ -133,12 +172,22 @@ function getStack() {
 
 // the game is over when one of the players loses all the cards (hand and stack cards)
 function gameOver() {
-    if (this.hand.length === 0 && this.stack.length === 0) {
-        return `Game Over! ${this} lost :(`
+    if (computer.deck.length === 0 && computer.stack.length === 0) {
+        alert('Game Over! You won!')
+        return true
     } else {
-        if (this.hand.length === 0 && this.stack.length !== 0) {
-            return 'click on get stack!'
+        if (computer.deck.length === 0 && computer.stack.length !== 0) {
+            computer.getStack()
         }
     }
-    return 'next round'
+
+    if (player.deck.length === 0 && player.stack.length === 0) {
+        alert('Game Over! You lost!')
+        return true
+    } else {
+        if (player.deck.length === 0 && player.stack.length !== 0) {
+            player.getStack()
+        }
+    }
+    return false
 }
